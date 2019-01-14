@@ -1,7 +1,7 @@
 %% Extract all the required behavioral data
-Dir = 'E:\' ;
+Dir = 'E:\rat 972\' ;
 currentSession = uigetdir(Dir, 'Select the recording session to analyze');
-session = '#970_test_D10_1_Ch01-16_clu' ;
+session = '#972_test_D13_2_pos3_clu_' ;
 
 % Load behavioral data
     load([currentSession '\trial.mat'])
@@ -11,7 +11,7 @@ session = '#970_test_D10_1_Ch01-16_clu' ;
     load([currentSession '\rez.mat' ])
         % rez: spikes x (timings, template N°, amplitude, ? , cluster N°)
         timings = rez.st3(:,1);     % timing in samples of each spike
-        clusters = rez.st3(:,2);    % cluster assignment of each spike after auto-merge
+        clusters = rez.st3(:,5);    % cluster assignment of each spike after auto-merge
 
 clear fullpathMAT
 %% Cluster analysis
@@ -24,27 +24,28 @@ nClusters = length(CLU);
 for i = 1:nClusters
     selectedCluster = CLU(i);
     % Extract the spike timestampts for all selected clusters  
-    [selectedSpikeTimestampsInUsec, selectedClusters]   = extractMUdata(clusters, timings, timeStamps, selectedCluster);
+    [selectedSpikeTimestampsInUsec, ~ ]   = extractMUdata(clusters, timings, timeStamps, selectedCluster);
 
 % The selected spike timestamps are linked to a specific trial, and stored
 % in trial.spikes (in ms)
-    
-    [trial] = linkSpikesAndBehaviour(trial, selectedSpikeTimestampsInUsec, before, after);
+    before  = 150 ;
+    after   = (4*150)+150 ;
+    trial   = linkSpikesAndBehaviour(trial, selectedSpikeTimestampsInUsec, before, after);
 
-disp( ['Data processed for cluster #' num2str(selectedClusters) ] )
+disp( ['Data processed for cluster #' num2str(selectedCluster) ] )
 %% plot PSTH with prespecified Y-axis limits
 % one subplot per condition
    
 plotPSTHsPerCondition_SL;
 
 %% Save the PSTH and datafile
-outFile = [session num2str(selectedClusters)];
+outFile = [session num2str(selectedCluster)];
     ha = axes('Position',[0 0 1 1],'Xlim',[0 1],'Ylim',[0 1],'Box','off','Visible','off','Units','normalized', 'clipping' , 'off');
     text(0.5,0.98, outFile,'HorizontalAlignment' ,'center','VerticalAlignment', 'top', 'FontSize', 14, 'Interpreter','none')
     figName = ['E:\Sequence Learning plots\' outFile '.tif'] ;
      saveas(gcf , figName, 'tif');
 
-fileName = [ 'E:\Sequence Learning data\' outFile '.mat']; save(fileName, 'trial', 'y' );
+fileName = [ 'E:\Sequence Learning data\' outFile '.mat']; save(fileName, 'trial', 'conditions', 'expType', 'y', 'BL', 'psths');
 
 close all
 disp('PSTH saved')

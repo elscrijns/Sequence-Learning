@@ -6,10 +6,11 @@
 %% Convert raw data to .dat file
 clear all
 clc
-session = '#970_D13_1_Ch17-32' ; outFile = [session '_MUA'];
-% type = 'RF';
-type = 'SL';
-% currentSession = uigetdir('E:\')
+session = '#970_RF_D5_pos3' ; outFile = [session '_MUA'];
+
+type = 'RF';
+% type = 'SL';
+% currentSession = uigetdir('E:\') 
 
 [currentSession] = generateNCS2Dat;
     % Opens a dialogbox that lets you select all CSC#.ncs files (1 per channel) 
@@ -40,7 +41,7 @@ disp('loaded behavioral data')
 disp('Initiate clustering')        
 % Perform clustering of currentSession with KiloSort 
 merge = 1; % perform post-hoc merging?
-master_file
+master_file;
         % Assumes data is saved as chunk.dat in currentSession
         % If not fPath in master_file & ops.fbinary in config_file need to
         % be adjusted      
@@ -95,6 +96,6 @@ end
     figName = [currentSession '\' outFile '.tif'] ;
     saveas(gcf , figName, 'tif');
 
-    save(fileName, 'trial' );
+    save(fileName, 'trial' ); 
     close all
     disp('PSTH saved')

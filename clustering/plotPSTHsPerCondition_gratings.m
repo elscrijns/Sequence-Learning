@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% Last modified on October 20th by Els.
+% Created on January-8th by Els.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -9,7 +9,8 @@ conditions = [];
 expType    = [];
 BL         = [];
 spikeTimings = [];
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%s%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%s%%%%%%%%%%%%%%%%%%%%%%%%
 
 binWidth	= 10;                     % msec.
 stimDur     = 150;
@@ -26,17 +27,23 @@ for i = 1:length(trial)
     % the counts are converted to firig rate by 10^3/bninwidts
     conditions(end + 1) = trial(i).condition;
     expType(end + 1) = trial(i).expType;
-    trial(i).psth = psths(i, :);
+    trial(i).psth = psths(i, :);            
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Create PSTH per condition
-BL = mean(mean(psths(:,1:onsetIndex))); %200 ms
-y(1,:) = mean(psths(expType == 46, :)) - BL;
-y(2,:) = mean(psths(expType == 47, :)) - BL;
-y(3,:) = mean(psths(expType == 48, :)) - BL;
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+permType = repmat([0 45 10], 8*24,1);
+permType = reshape(permType, [],1 );
+permType = permType(1:end-1);
+
+%% sequence stimuli with blanc permutation
+% create index for 
+BL = mean(mean(psths(:,1:onsetIndex))); %150 ms
+y(1,:) = mean(psths(permType == 0, :)) - BL;
+y(2,:) = mean(psths(permType == 10, :)) - BL;
+y(3,:) = mean(psths(permType == 45, :)) - BL;
 
 figure('Units', 'centimeters' , 'OuterPosition', [0 0 16 18])
+
 for i = 1:3  
     hAx(i) = subplot(3,1,i);
     hold on, box off,
@@ -82,16 +89,36 @@ for i = 1:3
         xlabel('time, msec'), ylabel('spikes/sec');
     
         if i == 1
-            title('Sequence')
+            title('0° difference')
         elseif i==2
-            title('Random')
+            title('10° difference')
         else
-            title('Control')
+            title('45° difference')
         end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     clear stim* p
    
 end
- ylim(hAx,[min(lim(:,1))-50 , max(lim(:,2))+100 ]);
-clear BL lim psths i onsetIndex edges p*
-clear binWidth uniqueConditions conditions spikeTimings nConditions
+ ylim(hAx,[min(lim(:,1))-10 , max(lim(:,2))+10 ]);
+
+%%
+figure('OuterPosition', [-1500 0 600 300])
+    hold on, box off
+    plot(y')
+      % Figure annotation
+        plot([1 120], [0 0], '-k');
+        plot([onsetIndex onsetIndex],  [-500 1000],  ':r')
+        plot([off off],  [-500 1000],  ':r')
+        set(gca, 'XTick',      [1 15 30 45 60 75 90] );
+        set(gca, 'XTickLabel', [-before 0 150 300 450 600 after]);
+        xlabel('time, msec'), ylabel('spikes/sec');
+        xlim([1 size(psths, 2)]);
+        legend('0°','10°', '45°','Location', 'NorthWest')
+        legend boxoff
+        figName = fullfile(currentSession, [outFile '_overlay.tif'] );
+        saveas(gcf , figName, 'tif');
+        
+        clear figName
+        %%
+clear lim i onsetIndex edges p1 p2 p3 p4 hAx off 
+clear binWidth uniqueConditions conditions spikeTimings nConditions    
