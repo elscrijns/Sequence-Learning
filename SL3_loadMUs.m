@@ -12,7 +12,9 @@ after       = (4*150)+150;
 edges       = -before:binWidth:after; % msec.
 ON          = before / binWidth ;
 OFF         = ON + 4*stimDur/binWidth;
-
+load('C:\Users\u0105250\Documents\MATLAB\Sequence Learning\design\randomPerms.mat')
+order_RAN = zeros(n,192);
+order_CON = zeros(n,192);
 %% Process each cluster
 clear C
 for i = 1:n
@@ -21,17 +23,16 @@ for i = 1:n
     
     % split file name to extract variables 
     C = split(fileName,{'_' '.'} );
-     
-     MU(i) = i;
-     ID(i) = categorical(C(1));
-     day(i) = categorical(C(3));
-     phase(i) = categorical(C(4));
-     pos(i) = categorical(C(5));
-     clu(i) = categorical(C(8));
+    MU(i) = i;
+    ID(i) = categorical(C(1));
+    day(i) = categorical(C(3));
+    phase(i) = categorical(C(4));
+    pos(i) = categorical(C(5));
+    clu(i) = categorical(C(end-1));
     
-     clear C
+    clear C
     
-     % calculate average PSTHs per category
+% calculate average PSTHs per category
     baseline(i) = BL;
     
     SEQ(i,:) = mean(psths(expType == 46, :)) - BL;
@@ -51,29 +52,37 @@ for i = 1:n
     Threshold(i) = any(mean(psths(:,15:30)) > 2*SD(i) );
    
     % Mean responses per stim
-    for s = 1:4
+    for s = 1:5
         win = [1:15] + s*15;
         meanSEQ(i,s) = mean(SEQ(i,win));
         meanRAN(i,s) = mean(RAN(i,win));
         meanCON(i,s) = mean(CON(i,win));        
     end
+        clear win s
+   
+    % extract identifiers for first stim per trial
+    % each condition no (1:24) is linked to a specific presentation order
+    % as described in randomCond
+        n1 = length(psths(expType == 47));
+        order_RAN(i,1:n1) = randomCond(conditions(expType == 47),1);
+        n2 = length(psths(expType == 48));
+        order_CON(i,1:n2) = randomCond(conditions(expType == 48),1);
+    
+        clear n1 n2 conditions
+    
+    % keep raw PSTHs per trial for processing of individual stims
+    PSTH_SEQ{i} =  psths(expType == 46,:);
+    PSTH_RAN{i} =  psths(expType == 47,:);
+    PSTH_CON{i} =  psths(expType == 48,:);
 end
  responsiveMU = logical(responsiveMU);
   
- filenames = {files.name};
+ filenames = {files.name}; 
         save('DATA\SequenceLearningData.mat', 'filenames', 'baseline', 'SD', ...
             'meanFR', 'responsiveMU', 'Threshold', 'SEQ', 'RAN', 'CON',  ...
-            'meanSEQ', 'meanRAN', 'meanCON', 'p1', 'ID','day','phase','pos', 'clu')
-%% responsive MU: Significant response to first stim
-% p values from T-test comparing BL to mean response to stim 1
-figure;
-    hist(p1, 0:0.01:max(p1))
-    line([0.05 0.05], [0 20], 'Color', 'red')
-    title('p-val for responsive MU')
-    box off
-disp(['Number of responsive MU = ' num2str(sum(responsiveMU))])
-
-
+            'meanSEQ', 'meanRAN', 'meanCON', 'p1', 'ID','day','phase','pos', ...
+            'PSTH_SEQ','PSTH_CON', 'PSTH_RAN', 'order_RAN', 'order_CON', 'clu', 'MU')
+clear all
 %% Analysis of conditions
 % p values from signrank comparing SEQ & RAN response pattern
 % figure;

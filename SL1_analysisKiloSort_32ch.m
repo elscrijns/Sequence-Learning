@@ -6,7 +6,7 @@
 %% Convert raw data to .dat file
 clear all
 clc
-session = '#970_gratings_pos15' ; outFile = [session '_MUA'];
+session = '#970_gratings_pos1' ; outFile = [session '_MUA'];
 % session = 'test_order_csc' ; outFile = [session '_MUA'];
 type = 'RF';
 % type = 'SL';

@@ -32,8 +32,8 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Create PSTH per condition
 BL = mean(mean(psths(:,1:onsetIndex))); %200 ms
-y(1,:) = mean(psths(expType == 49, :)) - BL;
-y(2,:) = mean(psths(expType == 50, :)) - BL;
+y(1,:) = mean(psths(expType == 46, :)) - BL;
+y(2,:) = mean(psths(expType == 47, :)) - BL;
 y(3,:) = mean(psths(expType == 48, :)) - BL;
 
 figure('Units', 'centimeters' , 'OuterPosition', [0 0 16 18])
@@ -94,4 +94,4 @@ for i = 1:3
 end
  ylim(hAx,[min(lim(:,1))-10 , max(lim(:,2))+10 ]);
 clear lim i onsetIndex edges p1 p2 p3 p4 hAx off 
-clear binWidth uniqueConditions conditions spikeTimings nConditions
+clear binWidth uniqueConditions spikeTimings nConditions

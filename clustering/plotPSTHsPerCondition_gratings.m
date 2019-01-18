@@ -31,7 +31,7 @@ for i = 1:length(trial)
 end
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-permType = repmat([0 45 10], 8*24,1);
+permType = repmat([45 10 0], 8*24,1);
 permType = reshape(permType, [],1 );
 permType = permType(1:end-1);
 
@@ -101,14 +101,14 @@ for i = 1:3
 end
  ylim(hAx,[min(lim(:,1))-10 , max(lim(:,2))+10 ]);
 
-%%
+%% plot PSTH overlay of 3 conditions
 figure('OuterPosition', [-1500 0 600 300])
     hold on, box off
     plot(y')
       % Figure annotation
         plot([1 120], [0 0], '-k');
-        plot([onsetIndex onsetIndex],  [-500 1000],  ':r')
-        plot([off off],  [-500 1000],  ':r')
+        plot([onsetIndex onsetIndex],  ylim,  ':r')
+        plot([off off],  ylim,  ':r')
         set(gca, 'XTick',      [1 15 30 45 60 75 90] );
         set(gca, 'XTickLabel', [-before 0 150 300 450 600 after]);
         xlabel('time, msec'), ylabel('spikes/sec');
@@ -116,7 +116,7 @@ figure('OuterPosition', [-1500 0 600 300])
         legend('0°','10°', '45°','Location', 'NorthWest')
         legend boxoff
         figName = fullfile(currentSession, [outFile '_overlay.tif'] );
-        saveas(gcf , figName, 'tif');
+        saveas(gcf , figName, 'tif'); close
         
         clear figName
         %%

@@ -5,7 +5,8 @@ Blue   = [0.00 0.45 0.74];
 Orange = [0.85 0.33 0.10];
 Yellow = [0.93 0.69 0.13];
 folder = 'E:\Results\';
-%% mean responses per stimulus for significant MU clustersfigure('Units', 'centimeters', 'InnerPosition', [-30,10,10,6]);
+%% mean responses per stimulus for significant MU clusters
+figure('Units', 'centimeters', 'InnerPosition', [-30,10,10,6]);
 selection  = responsiveMU %& phase == '2';
 
 barwitherr( [sem(meanSEQ(selection,:),1); sem(meanRAN(selection,:),1); sem(meanCON(selection,:),1)]', [mean(meanSEQ(selection,:)); mean(meanRAN(selection,:)); mean(meanCON(selection,:))]')
@@ -16,7 +17,7 @@ barwitherr( [sem(meanSEQ(selection,:),1); sem(meanRAN(selection,:),1); sem(meanC
   legend boxoff
   box off
 %%
-  SaveFig(30,20,[folder 'meanResp'])
+  SaveFig(15,10,[folder 'meanResp'])
   close
 %% normalized responses
 normSEQ = meanSEQ./meanSEQ(:,1);
@@ -31,5 +32,5 @@ barwitherr( [sem(normSEQ(selection,:),1); sem(normRAN(selection,:),1); sem(normC
   legend boxoff
   box off
 %%
-  SaveFig(30,20,[folder 'normResp'])
+  SaveFig(15,10,[folder 'normResp'])
   close
