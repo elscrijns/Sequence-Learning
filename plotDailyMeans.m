@@ -11,7 +11,7 @@ D = unique(day);
 lim = [];
 figure;
 for i = 1:3 % per day
-    hAX(i) = subplot(2,3,i);    
+    hAX(i) = subplot(2,4,i);    
     selection = responsiveMU & day == D(i) & phase == '1' ;
     barwitherr( [sem(meanSEQ(selection,:),1); sem(meanRAN(selection,:),1); sem(meanCON(selection,:),1)]', [mean(meanSEQ(selection,:)); mean(meanRAN(selection,:)); mean(meanCON(selection,:))]')
       title([char(D(i)) ', n=' num2str(sum(selection)) ])
@@ -22,22 +22,25 @@ for i = 1:3 % per day
           legend('SEQ','RAN','CON')
           legend boxoff      
           title('')
-          ylabel('pre-exposure');
+      elseif i == 2
+          ylabel('spikes/sec');
       end
       lim(end+1,:) = ylim;
+%       ylim( [-4 8])
   
-  hAX(i+3) = subplot(2,3,i+3);
+  hAX(i+3) = subplot(2,4,i+4);
   selection = responsiveMU & day == D(i) & phase == '2' ;
   barwitherr( [sem(meanSEQ(selection,:),1); sem(meanRAN(selection,:),1); sem(meanCON(selection,:),1)]', [mean(meanSEQ(selection,:)); mean(meanRAN(selection,:)); mean(meanCON(selection,:))]')
   title([char(D(i)) ', n=' num2str(sum(selection)) ])
       xlabel('Stimulus')
       box off
       if i==1
-          ylabel('post-exposure');
+          ylabel('spikes/sec');
       end
   lim(end+1,:) = ylim;
+%   ylim([-2 5])
 end
 ylim(hAX, [min(lim(:,1)) max(lim(:,2))])
-
+% ylim(hAX(4), [-4 12])
 %%
-SaveFig(30,20,'MeanRespPerPhase'); close
+SaveFig(30,20,'E:\Results\MeanRespPerPhase_#974'); close

@@ -6,7 +6,7 @@
 %% Convert raw data to .dat file
 clear all
 clc
-session = '#970_gratings_pos1' ; outFile = [session '_MUA'];
+session = '#973_RF_D10_pos4' ; outFile = [session '_MUA'];
 % session = 'test_order_csc' ; outFile = [session '_MUA'];
 type = 'RF';
 % type = 'SL';
@@ -26,19 +26,6 @@ disp(currentSession)
         %   - chunk.dat.mat     contains the sample timestamps
         %   - events.nev        contains behavioral data
 
-%% Extract all the required behavioral data
-try
-    load([currentSession '\trial.mat'])
-catch
-    filename    = [currentSession '\Events.nev'];
-    [trial]     = extractBehaviouralData(filename,1);
-        % in case of an error go to extractBehaviouralData.m and follow
-        % instructions in section 1
-    save([currentSession '\trial.mat'], 'trial' )
-
-    clear fileNEV filename
-end
-disp('loaded behavioral data')
 %%
 disp('Initiate clustering')        
 % Perform clustering of currentSession with KiloSort 
@@ -53,7 +40,21 @@ master_file_32ch
         % rez.mat contains all data needed for processing in Matlab
 % clearvars -except currentSession trial
 disp('clustering finished')
- %% Load clusters and spike times
+
+%% Extract all the required behavioral data
+try
+    load([currentSession '\trial.mat'])
+catch
+    filename    = [currentSession '\Events.nev'];
+    [trial] = extractBehaviouralData(filename,1);
+        % in case of an error go to extractBehaviouralData.m and follow
+        % instructions in section 1
+    save([currentSession '\trial.mat'], 'trial' )
+
+    clear fileNEV filename
+end
+disp('loaded behavioral data')
+%% Load clusters and spike times
 extractTimestamps;  % Timestamps (in usec) of each sample with sampling rate of 32556
 
 % replaces loadKWIKfile from Klusta analysis
@@ -80,20 +81,19 @@ load([currentSession '\rez.mat' ])
     after = 900;  % ms time after trial start (min. stim presentation time)
     [trial] = linkSpikesAndBehaviour(trial, selectedSpikeTimestampsInUsec, before, after);
 disp('MU data processed')
-
 %% plot PSTH
 % one subplot per stimulus or condition
 figure('OuterPosition', [-1500 0 1000 800])
-if type == 'RF'
+if strcmp(type,'RF')
     fileName = ['E:\RF mapping data\' outFile '.mat'];
     plotPSTHsPerCondition_exp33;
-elseif type == 'SL'
+elseif strcmp(type, 'SL')
     fileName = ['E:\Sequence Learning data\MUA\' outFile '.mat'];
     plotPSTHsPerCondition_SL;
-elseif type == 'perm'
+elseif strcmp(type, 'perm')
     fileName = ['E:\Sequence Learning data\permutations\' outFile '.mat'];
     plotPSTHsPerCondition_perm;
-elseif type == 'grating'
+elseif strcmp(type,'grating')
     fileName = fullfile(currentSession, [ outFile '.mat']) ;
     plotPSTHsPerCondition_gratings;
 end

@@ -82,33 +82,4 @@ end
             'meanFR', 'responsiveMU', 'Threshold', 'SEQ', 'RAN', 'CON',  ...
             'meanSEQ', 'meanRAN', 'meanCON', 'p1', 'ID','day','phase','pos', ...
             'PSTH_SEQ','PSTH_CON', 'PSTH_RAN', 'order_RAN', 'order_CON', 'clu', 'MU')
-clear all
-%% Analysis of conditions
-% p values from signrank comparing SEQ & RAN response pattern
-% figure;
-%     hSR = pSR < 0.05;
-%     hist(pSR, 0:0.01:max(pSR))
-%     line([0.05 0.05], [0 70], 'Color', 'red')
-%     title('p-val for difference between conditions')
-%     box off
-% disp(['2-sided wilcoxon paired ranks test = ' num2str(sum(hSR))])
-
-% FR per stimulus, average across presentations
-% FR in 20ms bins -> comparing 2 conditions
-% 2-sided wilcoxon paired ranks test per bin
-% FDR correction Benjamini & Hochberg 1995
-
-% avoid selectivity bias
-% on half the data select l-m-h FR stimuli, compare conditions per group
-%% preliminary results
-  
-  % https://nl.mathworks.com/help/stats/repeatedmeasuresmodel.ranova.html
-% mean responses per stimulus for significant MU clusters
-figure
-% subplot(2,1,1)
-  barwitherr( [sem(meanSEQ(responsiveMU,:),1); sem(meanRAN(responsiveMU,:),1); sem(meanCON(responsiveMU,:),1)]', [mean(meanSEQ(responsiveMU,:)); mean(meanRAN(responsiveMU,:)); mean(meanCON(responsiveMU,:))]')
-  title('Average responses')
-  legend('SEQ','RAN','CON')
-  legend boxoff
-  box off
-     
+% clear all

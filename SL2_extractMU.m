@@ -2,7 +2,7 @@
 clear all, clc
 Dir = 'E:\' ;
 currentSession = uigetdir(Dir, 'Select the recording session to analyze');
-session = '#972_test_D12_1_pos8_clu_' ;
+session = '#974_test_D11_1_pos4_clu_' ;
 
 % Load behavioral data
     load([currentSession '\trial.mat'])
