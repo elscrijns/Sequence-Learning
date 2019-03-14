@@ -1,6 +1,7 @@
 %% Analysis of responses per first stimulus
 clearvars
 load('DATA\SequenceLearningData.mat')
+Blue   = [0.00 0.45 0.74];
 Orange = [0.85 0.33 0.10];
 Yellow = [0.93 0.69 0.13];
 
