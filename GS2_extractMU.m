@@ -2,7 +2,7 @@
 clearvars, clc,
 Dir = 'E:\' ;
 currentSession = uigetdir(Dir, 'Select the recording session to analyze');
-session = '#975_test_D15_2_pos2_clu_' ;
+session = '#975_gratings_pos5_clu_' ;
 
 % Load behavioral data
     load([currentSession '\trial.mat'])
@@ -37,18 +37,20 @@ for i = 1:nClusters
 disp( ['Data processed for cluster #' num2str(selectedCluster) ] )
 %% plot PSTH with prespecified Y-axis limits
 % one subplot per condition
-outFile = [session num2str(selectedCluster)];   
-plotPSTHsPerCondition_SL;
+outFile = [session num2str(selectedCluster)]; 
+try
+    plotPSTHsPerCondition_gratings2;
+end
 % gives output: psths conditions expType BL y
 
 %% Save the PSTH and datafile
 
-    ha = axes('Position',[0 0 1 1],'Xlim',[0 1],'Ylim',[0 1],'Box','off','Visible','off','Units','normalized', 'clipping' , 'off');
-    text(0.5,0.98, outFile,'HorizontalAlignment' ,'center','VerticalAlignment', 'top', 'FontSize', 14, 'Interpreter','none')
-    figName = ['E:\Sequence Learning plots\' outFile '.tif'] ;
-     saveas(gcf , figName, 'tif');
+%     ha = axes('Position',[0 0 1 1],'Xlim',[0 1],'Ylim',[0 1],'Box','off','Visible','off','Units','normalized', 'clipping' , 'off');
+%     text(0.5,0.98, outFile,'HorizontalAlignment' ,'center','VerticalAlignment', 'top', 'FontSize', 14, 'Interpreter','none')
+%     figName = ['E:\' outFile '.tif'] ;
+%      saveas(gcf , figName, 'tif');
 
-fileName = [ 'E:\Sequence Learning data\' outFile '.mat']; save(fileName, 'conditions', 'expType', 'y', 'BL', 'psths');
+fileName = [ 'E:\Grating Sequence data\' outFile '.mat']; save(fileName, 'conditions', 'expType', 'y', 'BL', 'psths');
 
 close all
 clear selectedSpikeTimestampsInUsec selectedCluster outFile fileName expType y BL psths conditions

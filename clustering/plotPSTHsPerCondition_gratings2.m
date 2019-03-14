@@ -36,9 +36,9 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Create PSTH per condition
 BL = mean(mean(psths(:,1:onsetIndex))); %50 ms
-y(1,:) = mean(psths(expType == 53, 1:end-1)) - BL; % random
-y(2,:) = mean(psths(expType == 52, 1:end-1)) - BL; % small 10°
-y(3,:) = mean(psths(expType == 54, 1:end-1)) - BL; % large 30°
+y(1,:) = mean(psths(expType == 53, 1:end-1)); % random
+y(2,:) = mean(psths(expType == 52, 1:end-1)); % small 10°
+y(3,:) = mean(psths(expType == 54, 1:end-1)); % large 30°
 
 COL   = [0.00 0.45 0.74; 0.85 0.33 0.10; 0.93 0.69 0.13];
 
@@ -63,8 +63,8 @@ Average = mean(y(:,8:18)');
           
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     clear stim* p
-   
- ylim([min(lim(:,1))*1.1 , max(lim(:,2))*1.1 ]);
+ 
+ ylim([lim(:,1)*0.9 , lim(:,2)*1.1 ]);
  legend('random','small','large')
  legend boxoff
 clear lim i onsetIndex edges p1 p2 p3 p4 hAx off 

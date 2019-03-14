@@ -6,12 +6,14 @@ Orange = [0.85 0.33 0.10];
 Yellow = [0.93 0.69 0.13];
 folder = 'E:\Results\';
 %% mean responses per stimulus for significant MU clusters
-% figure('Units', 'centimeters', 'InnerPosition', [-30,10,10,6]);
-selection  = responsiveMU; %& phase == '2';
+% figure('Units', 'centimeters', 'InnerPosition', [-30,10,15,10]);
+subplot(2,1,2), hold on
+selection  = responsiveMU & phase == '2';
 
 barwitherr( [sem(meanSEQ(selection,:),1); sem(meanRAN(selection,:),1); sem(meanCON(selection,:),1)]', [mean(meanSEQ(selection,:)); mean(meanRAN(selection,:)); mean(meanCON(selection,:))]');
   title('Average response')
   set(gca,'XTick', [1 2 3 4 5])
+  set(gca,'XTickLabel', {'1'; '2'; '3'; '4'; 'OFF'})
   xlabel('Stimulus')
   ylabel('mean +/- sem')
   legend('SEQ','RAN','CON')
@@ -21,12 +23,14 @@ barwitherr( [sem(meanSEQ(selection,:),1); sem(meanRAN(selection,:),1); sem(meanC
   SaveFig(15,10,[folder 'meanResp'])
   close
 %% normalized responses
+ figure('Units', 'centimeters', 'InnerPosition', [-30,10,15,10]);
 normSEQ = meanSEQ./meanSEQ(:,1);
 normRAN = meanRAN./meanRAN(:,1);
 normCON = meanCON./meanCON(:,1);
 
 barwitherr( [sem(normSEQ(selection,:),1); sem(normRAN(selection,:),1); sem(normCON(selection,:),1)]', [mean(normSEQ(selection,:)); mean(normRAN(selection,:)); mean(normCON(selection,:))]')
-  title('Normalized response')
+  title('Normalized response (mean/stim1)')
+  set(gca,'XTickLabel', {'1'; '2'; '3'; '4'; 'OFF'})
   xlabel('Stimulus')
   ylabel('mean +/- sem')
   legend('SEQ','RAN','CON')
